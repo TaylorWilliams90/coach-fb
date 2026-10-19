@@ -13,8 +13,9 @@ return new class extends Migration
     {
         Schema::create('formations', function (Blueprint $table) {
             $table->id();
-            $table->string('name'); // e.g., "Shotgun Spread", "Nickel 4-3"
-            $table->string('type'); // "offense" or "defense"
+            $table->foreignId('team_id')->constrained()->cascadeOnDelete();
+            $table->string('name');                          // e.g. "I-Form", "Shotgun Spread"
+            $table->enum('side', ['offense', 'defense']);
             $table->timestamps();
         });
     }

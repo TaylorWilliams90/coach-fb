@@ -10,11 +10,7 @@ use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 class Team extends Model
 {
     protected $fillable = [
-        'user_id',
-        'name',
-        'season',
-        'location',
-        'grade',
+        'user_id', 'name', 'season', 'location', 'grade',
     ];
 
     public function user(): BelongsTo
@@ -27,13 +23,16 @@ class Team extends Model
         return $this->hasMany(Player::class)->orderBy('jersey_number');
     }
 
-    // ✅ Keep only ONE games() method
+    public function formations(): HasMany
+    {
+        return $this->hasMany(Formation::class);
+    }
+
     public function games(): HasMany
     {
         return $this->hasMany(Game::class, 'my_team_id');
     }
 
-    // All plays across all games this season
     public function plays(): HasManyThrough
     {
         return $this->hasManyThrough(
@@ -42,5 +41,11 @@ class Team extends Model
             'my_team_id',
             'game_id',
         );
+    }
+
+    public static function fieldLengthForGrade(string $grade): int
+    {
+        $gradeNumber = (int) filter_var($grade, FILTER_SANITIZE_NUMBER_INT);
+        return $gradeNumber <= 7 ? 80 : 100;
     }
 }

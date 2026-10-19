@@ -1,5 +1,4 @@
 <?php
-// database/migrations/xxxx_create_players_table.php
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -7,15 +6,18 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
+    /**
+     * Run the migrations.
+     */
     public function up(): void
     {
         Schema::create('players', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('team_id')->constrained()->onDelete('cascade');
+            $table->foreignId('team_id')->constrained()->cascadeOnDelete();
             $table->string('name');
             $table->integer('jersey_number');
-            $table->string('position');             // QB, RB, WR, etc.
-            $table->integer('grade')->nullable();   // 6, 7, 8, 9, etc.
+            $table->string('position');
+            $table->integer('grade')->nullable();
             $table->string('parent_name')->nullable();
             $table->string('parent_phone')->nullable();
             $table->string('parent_email')->nullable();
@@ -25,6 +27,9 @@ return new class extends Migration
         });
     }
 
+    /**
+     * Reverse the migrations.
+     */
     public function down(): void
     {
         Schema::dropIfExists('players');
